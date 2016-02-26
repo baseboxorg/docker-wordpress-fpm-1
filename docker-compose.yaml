@@ -1,0 +1,25 @@
+db:
+  image: "mariadb:latest"
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+
+wordpress-fpm:
+  image: "wordpress:fpm"
+  links:
+    - db:mysql
+
+web:
+  build: ./nginx
+  volumes_from:
+    - wordpress-fpm
+  links:
+    - wordpress-fpm:fpm
+  ports:
+    - 8000:80
+
+# phpmyadmin:
+#   image: "phpmyadmin/phpmyadmin:latest"
+#   links:
+#     - db
+#   ports:
+#     - "1234:80"
